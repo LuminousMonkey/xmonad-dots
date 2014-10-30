@@ -2,6 +2,7 @@ import XMonad
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Util.EZConfig
 import XMonad.Util.Run(spawnPipe)
 import System.IO
 
@@ -21,15 +22,15 @@ main = do
     , focusedBorderColor = myFocusedBorderColor
     , logHook = myLogHook workspaceBar >> fadeInactiveLogHook 0xdddddddd
     , workspaces = myWorkspaces
-    }
-
+    } `additionalKeys`
+    [ ((mod4Mask, xK_p), spawn "exec=`dmenu_run -h 20 -fn \"Lucida Grande\"` && eval \"exec $exec\"") ]
 --------------------------------------------------------------------------------------------
 -- APPEARANCE CONFIG                                                                      --
 --------------------------------------------------------------------------------------------
 
 -- Colors and fonts
-myFont               = "Envy Code R:size=8"
-dzenFont             = "Envy Code R:size=8"
+myFont               = "Lucida Grande:size=12"
+dzenFont             = "Lucida Grande:size=12"
 colorBlack           = "#1a1a1a" --Background (Dzen_BG)
 colorBlackAlt        = "#404040" --Black Xdefaults
 colorGray            = "#444444" --Gray       (Dzen_FG2)
@@ -51,8 +52,8 @@ myWorkspaces = ["[1:Emacs]", "[2:Web]", "[3:Term]", "[4:Reference]", "[5:VMWare]
 
 -- StatusBars
 myWorkspaceBar, myTopStatusBar :: String
-myWorkspaceBar    = "dzen2 -x '0' -y '0' -h '17' -w '920' -ta 'l' -fg '" ++ colorWhiteAlt ++ "' -bg '" ++ colorBlack ++ "' -fn '" ++ dzenFont ++ "' -p -e ''"
-myTopStatusBar    = "conky -c /home/aldredmr/.conkydzentop | dzen2 -x '920' -y '0' -h '17' -w '1640' -fg '" ++colorWhiteAlt ++ "' -bg '" ++ colorBlack ++ "' -fn '" ++ dzenFont ++ "' -ta r -e ''"
+myWorkspaceBar    = "dzen2 -x '0' -y '0' -h '20' -w '1500' -ta 'l' -fg '" ++ colorWhiteAlt ++ "' -bg '" ++ colorBlack ++ "' -fn '" ++ dzenFont ++ "' -p -e ''"
+myTopStatusBar    = "conky -c /home/aldredmr/.conkydzentop | dzen2 -x '920' -y '0' -h '20' -w '1640' -fg '" ++colorWhiteAlt ++ "' -bg '" ++ colorBlack ++ "' -fn '" ++ dzenFont ++ "' -ta r -e ''"
 
 myBitmapsDir = "/home/aldredmr/.xmonad/dzen"
 
