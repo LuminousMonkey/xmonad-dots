@@ -53,7 +53,7 @@ myWorkspaces = ["[1:Emacs]", "[2:Web]", "[3:Term]", "[4:Reference]", "[5:VMWare]
 -- StatusBars
 myWorkspaceBar, myTopStatusBar :: String
 myWorkspaceBar    = "dzen2 -x '0' -y '0' -h '20' -w '1500' -ta 'l' -fg '" ++ colorWhiteAlt ++ "' -bg '" ++ colorBlack ++ "' -fn '" ++ dzenFont ++ "' -p -e ''"
-myTopStatusBar    = "conky -c /home/aldredmr/.conkydzentop | dzen2 -x '920' -y '0' -h '20' -w '1640' -fg '" ++colorWhiteAlt ++ "' -bg '" ++ colorBlack ++ "' -fn '" ++ dzenFont ++ "' -ta r -e ''"
+myTopStatusBar    = "conky -c /home/aldredmr/.conkydzentop | dzen2 -x '920' -y '0' -h '20' -w '1540' -fg '" ++colorWhiteAlt ++ "' -bg '" ++ colorBlack ++ "' -fn '" ++ dzenFont ++ "' -ta r -e ''"
 
 myBitmapsDir = "/home/aldredmr/.xmonad/dzen"
 
