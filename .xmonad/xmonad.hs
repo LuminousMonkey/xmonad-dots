@@ -23,14 +23,14 @@ main = do
     , logHook = myLogHook workspaceBar >> fadeInactiveLogHook 0xdddddddd
     , workspaces = myWorkspaces
     } `additionalKeys`
-    [ ((mod4Mask, xK_p), spawn "exec=`dmenu_run -h 20 -fn \"Lucida Grande\"` && eval \"exec $exec\"") ]
+    [ ((mod4Mask, xK_p), spawn "exec=`dmenu_run -h 20 -fn \"Noto Sans\"` && eval \"exec $exec\"") ]
 --------------------------------------------------------------------------------------------
 -- APPEARANCE CONFIG                                                                      --
 --------------------------------------------------------------------------------------------
 
 -- Colors and fonts
-myFont               = "Lucida Grande:size=12"
-dzenFont             = "Lucida Grande:size=12"
+myFont               = "Noto Sans:size=12"
+dzenFont             = "Noto Sans:size=12"
 colorBlack           = "#1a1a1a" --Background (Dzen_BG)
 colorBlackAlt        = "#404040" --Black Xdefaults
 colorGray            = "#444444" --Gray       (Dzen_FG2)
