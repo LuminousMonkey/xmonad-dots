@@ -2,6 +2,8 @@ import XMonad
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Util.EZConfig
 import XMonad.Util.Run(spawnPipe)
 import System.IO
@@ -12,8 +14,9 @@ main = do
   workspaceBar <- spawnPipe myWorkspaceBar
   topStatusBar <- spawnPipe myTopStatusBar
   xmonad $ defaultConfig {
-    manageHook = manageDocks <+> manageHook defaultConfig,
+    manageHook = manageDocks <+> (isFullscreen --> doFullFloat) <+> manageHook defaultConfig,
     layoutHook = avoidStruts $ layoutHook defaultConfig
+    , handleEventHook = fullscreenEventHook
     , modMask = mod4Mask -- Rebind Mod to the Windows key
     , focusFollowsMouse = True
     , terminal = "terminator"
