@@ -53,6 +53,14 @@ myFocusedBorderColor = "#A54242"
 myWorkspaces :: [WorkspaceId]
 myWorkspaces = ["[1:Emacs]", "[2:Web]", "[3:Term]", "[4:Reference]", "[5:VMWare]", "[6:Game]", "[7:Music]", "[8:Other]"]
 
+-- HACK to get around Dropdowns not appearing for Chrome.
+setWorkArea :: X ()
+setWorkArea = withDisplay $ \dpy -> do
+    a <- getAtom "_NET_WORKAREA"
+    c <- getAtom "CARDINAL"
+    r <- asks theRoot
+    io $ changeProperty32 dpy r a c propModeReplace (concat $ replicate (length myWorkspaces) [0, 20, 3760, 1580])
+
 -- StatusBars
 myWorkspaceBar, myTopStatusBar :: String
 myWorkspaceBar    = "dzen2 -x '0' -y '0' -h '20' -w '1500' -ta 'l' -fg '" ++ colorWhiteAlt ++ "' -bg '" ++ colorBlack ++ "' -fn '" ++ dzenFont ++ "' -p -e ''"
