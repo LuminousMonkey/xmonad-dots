@@ -6,6 +6,7 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Util.EZConfig
 import XMonad.Util.Run(spawnPipe)
+import XMonad.Config.Desktop
 import System.IO
 
 -- Main
@@ -13,7 +14,7 @@ main :: IO ()
 main = do
   workspaceBar <- spawnPipe myWorkspaceBar
   topStatusBar <- spawnPipe myTopStatusBar
-  xmonad $ defaultConfig {
+  xmonad $ desktopConfig {
     manageHook = manageDocks <+> (isFullscreen --> doFullFloat) <+> manageHook defaultConfig,
     layoutHook = avoidStruts $ layoutHook defaultConfig
     , handleEventHook = fullscreenEventHook
@@ -52,14 +53,6 @@ myFocusedBorderColor = "#A54242"
 -- Workspaces
 myWorkspaces :: [WorkspaceId]
 myWorkspaces = ["[1:Emacs]", "[2:Web]", "[3:Term]", "[4:Reference]", "[5:VMWare]", "[6:Game]", "[7:Music]", "[8:Other]"]
-
--- HACK to get around Dropdowns not appearing for Chrome.
-setWorkArea :: X ()
-setWorkArea = withDisplay $ \dpy -> do
-    a <- getAtom "_NET_WORKAREA"
-    c <- getAtom "CARDINAL"
-    r <- asks theRoot
-    io $ changeProperty32 dpy r a c propModeReplace (concat $ replicate (length myWorkspaces) [0, 20, 3760, 1580])
 
 -- StatusBars
 myWorkspaceBar, myTopStatusBar :: String
