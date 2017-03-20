@@ -1,13 +1,76 @@
 import XMonad
-import XMonad.Hooks.FadeInactive
+import XMonad.Util.EZConfig
+import qualified XMonad.StackSet as S
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.FadeInactive
+import XMonad.Hooks.ICCCMFocus
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
-import XMonad.Hooks.EwmhDesktops
-import XMonad.Util.EZConfig
+import XMonad.Hooks.SetWMName
+import XMonad.Layout.Combo
+import XMonad.Layout.Fullscreen
+import XMonad.Layout.Grid
+import XMonad.Layout.LayoutModifier
+import XMonad.Layout.Named
+import XMonad.Layout.NoBorders
+import XMonad.Layout.PerWorkspace
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Config.Desktop
 import System.IO
+
+
+
+-- Defaults on which we build
+myBaseConfig = defaultConfig
+
+-- Display
+myBorderWidth = 3
+myNormalBorderColour = "#404040"
+myFocusedBorderColour = "#A54242"
+
+-- Workspaces
+myWorkspaces :: [WorkspaceId]
+myWorkspaces = ["[1:Emacs]", "[2:Web]", "[3:Term]", "[4:Reference]", "[5:VMWare]", "[6:Game]", "[7:Music]", "[8:Other]"]
+
+-- Layouts
+basicLayout = Tall nmaster delta ratio where
+  nmaster = 1
+  delta = 3/100
+  ratio = 1/2
+tallLayout = named "tall" $ avoidStruts $ smartBorders $ basicLayout
+webLayout = named "web" $ avoidStruts $ smartBorders $ Tall 1 (3/100) (62/100)
+wideLayout = named "wide" $ avoidStruts $ smartBorders $ Mirror basicLayout
+singleLayout = named "single" $ avoidStruts $ smartBorders $ noBorders Full
+
+-- Make Java apps work better
+myStartupHook = startupHook myBaseConfig >> setWMName "LG3D" >> takeTopFocus
+
+myLayoutHook = web $ normal where
+  normal = tallLayout ||| wideLayout ||| singleLayout
+  web = onWorkspace "[2:Web]" (webLayout ||| wideLayout ||| singleLayout)
+
+-- Special treatment for specific windows:
+-- Put browsers in the web workspace
+-- Put initial terminals in the terms workspace
+myManageHook = webManageHooks <+> termManageHooks <+> musicManageHooks <+> manageHook myBaseConfig
+
+webManageHooks = composeAll [isWeb --> moveToWeb] where
+    isWeb     = foldr1 (<||>) [isBrowser]
+    isBrowser = className =? "Google-chrome"
+    moveToWeb = doF $ S.shift "[2:Web]"
+
+termManageHooks = isInitTerm --> moveToTerms where
+    isInitTerm  = stringProperty "WM_WINDOW_ROLE" =? "initTerm"
+    moveToTerms = doF $ S.shift "[3:Term]"
+
+musicManageHooks = isMusic --> moveToMusic where
+    isMusic     = stringProperty "WM_WINDOW_ROLE" =? "ncmpcpp" <||> className =? "Spotify"
+    moveToMusic = doF $ S.shift "[7:Music]"
+
+myEventHook = do
+  ewmhDesktopsEventHook
+  docksEventHook
 
 -- Main
 main :: IO ()
@@ -16,16 +79,17 @@ main = do
   topStatusBar <- spawnPipe myTopStatusBar
   xmonad $ desktopConfig {
     manageHook = manageDocks <+> (isFullscreen --> doFullFloat) <+> manageHook defaultConfig,
-    layoutHook = avoidStruts $ layoutHook defaultConfig
-    , handleEventHook = fullscreenEventHook
+    layoutHook = myLayoutHook
+    , handleEventHook = myEventHook
     , modMask = mod4Mask -- Rebind Mod to the Windows key
     , focusFollowsMouse = True
     , terminal = "terminator"
-    , borderWidth = 2
-    , normalBorderColor = myNormalBorderColor
-    , focusedBorderColor = myFocusedBorderColor
+    , borderWidth = myBorderWidth
+    , normalBorderColor = myNormalBorderColour
+    , focusedBorderColor = myFocusedBorderColour
     , logHook = myLogHook workspaceBar >> fadeInactiveLogHook 0xdddddddd
     , workspaces = myWorkspaces
+    , startupHook = myStartupHook
     } `additionalKeys`
     [ ((mod4Mask, xK_p), spawn "exec=`dmenu_run -h 20 -fn \"Noto Sans\"` && eval \"exec $exec\"") ]
 --------------------------------------------------------------------------------------------
@@ -47,12 +111,6 @@ colorYellow          = "#FFE863"
 colorRed             = "#d75f5f"
 colorGreen           = "#BDE077"
 myArrow              = "^fg(" ++ colorWhiteAlt ++ ")>^fg(" ++ colorBlue ++ ")>^fg(" ++ colorGray ++ ")>"
-myNormalBorderColor  = "#222222"
-myFocusedBorderColor = "#A54242"
-
--- Workspaces
-myWorkspaces :: [WorkspaceId]
-myWorkspaces = ["[1:Emacs]", "[2:Web]", "[3:Term]", "[4:Reference]", "[5:VMWare]", "[6:Game]", "[7:Music]", "[8:Other]"]
 
 -- StatusBars
 myWorkspaceBar, myTopStatusBar :: String
