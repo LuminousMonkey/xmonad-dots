@@ -57,7 +57,7 @@ myManageHook = webManageHooks <+> termManageHooks <+> musicManageHooks <+> manag
 
 webManageHooks = composeAll [isWeb --> moveToWeb] where
     isWeb     = foldr1 (<||>) [isBrowser]
-    isBrowser = className =? "Google-chrome"
+    isBrowser = className =? "google-chrome-stable"
     moveToWeb = doF $ S.shift "[2:Web]"
 
 termManageHooks = isInitTerm --> moveToTerms where
