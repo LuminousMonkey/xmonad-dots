@@ -91,7 +91,7 @@ main = do
     , workspaces = myWorkspaces
     , startupHook = myStartupHook
     } `additionalKeys`
-    [ ((mod4Mask, xK_p), spawn "exec=`dmenu_run -h 20 -fn \"Noto Sans\"` && eval \"exec $exec\"") ]
+    [ ((mod4Mask, xK_p), spawn "exec=`dmenu_run -fn \"Noto Sans-10\"` && eval \"exec $exec\"") ]
 --------------------------------------------------------------------------------------------
 -- APPEARANCE CONFIG                                                                      --
 --------------------------------------------------------------------------------------------
