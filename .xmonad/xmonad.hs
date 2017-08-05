@@ -91,7 +91,7 @@ main = do
     , workspaces = myWorkspaces
     , startupHook = myStartupHook
     } `additionalKeys`
-    [ ((mod4Mask, xK_p), spawn "exec=`dmenu_run -fn \"Noto Sans-10\"` && eval \"exec $exec\"") ]
+    [ ((mod4Mask, xK_p), spawn "exec=`dmenu_run -fn \"Noto Sans:size=12\"` && eval \"exec $exec\"") ]
 --------------------------------------------------------------------------------------------
 -- APPEARANCE CONFIG                                                                      --
 --------------------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ myArrow              = "^fg(" ++ colorWhiteAlt ++ ")>^fg(" ++ colorBlue ++ ")>^f
 -- StatusBars
 myWorkspaceBar, myTopStatusBar :: String
 myWorkspaceBar    = "dzen2 -x '0' -y '0' -h '20' -w '1500' -ta 'l' -fg '" ++ colorWhiteAlt ++ "' -bg '" ++ colorBlack ++ "' -fn '" ++ dzenFont ++ "' -p -e ''"
-myTopStatusBar    = "conky -c /home/aldredmr/.conkydzentop | dzen2 -x '920' -y '0' -h '20' -w '1540' -fg '" ++colorWhiteAlt ++ "' -bg '" ++ colorBlack ++ "' -fn '" ++ dzenFont ++ "' -ta r -e ''"
+myTopStatusBar    = "conky -c /home/aldredmr/.conkydzentop | dzen2 -x '1200' -y '0' -h '20' -w '1260' -fg '" ++colorWhiteAlt ++ "' -bg '" ++ colorBlack ++ "' -fn '" ++ dzenFont ++ "' -ta r -e ''"
 
 myBitmapsDir = "/home/aldredmr/.xmonad/dzen"
 
